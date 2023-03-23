@@ -26,6 +26,3 @@ class Shop:
         for c in self.customers:
             if c.email == email:
                 return c
-    def updateCustomer(self,name,addres,dob):
-        self.customers[name]
-        pass
