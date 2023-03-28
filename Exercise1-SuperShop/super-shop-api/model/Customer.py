@@ -13,6 +13,7 @@ class Customer:
         self.dob = dob
         self.temporaryPassword = ""
         self.password = random.randint(10000,100000)
+        self.boughtProducts = {}
 
     def verify(self, token):
         if self.verification_token == token:
@@ -24,4 +25,9 @@ class Customer:
     def resetPassword(self,new_pw):
         self.password = new_pw
         self.temporaryPassword = ''
+    def buyProduct(self,product, qty):
+        if product in self.boughtProducts:
+            self.boughtProducts[product] += qty
+        else:
+            self.boughtProducts[product] = qty
 
