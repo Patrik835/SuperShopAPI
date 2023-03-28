@@ -14,6 +14,7 @@ class Customer:
         self.temporaryPassword = ""
         self.password = random.randint(10000,100000)
         self.boughtProducts = {}
+        self.shoppingCart = {}
 
     def verify(self, token):
         if self.verification_token == token:

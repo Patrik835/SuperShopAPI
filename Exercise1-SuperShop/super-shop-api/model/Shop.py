@@ -14,21 +14,21 @@ class Shop:
         else:
             return False
 
-    def removeCustomer(self, c):
-        self.customers.remove(c)
+    def removeCustomer(self, c): 
+        self.customers.remove(c)                 #remove customer from list
 
     def getCustomer(self, cust_id):
-        for c in self.customers:
-            if c.customer_id == cust_id:
-                return c
-
-    def getCustomerbyEmail(self, email):
-        for c in self.customers:
-            if c.email == email:
-                return c
+        for c in self.customers:                 #search for customer by id
+            if c.customer_id == cust_id:         #if id is found
+                return c                         #return customer
+    def getCustomerbyEmail(self, email):                      
+        for c in self.customers:                  #search for customer by email          
+            if c.email == email:                  #if email is found            
+                return c                          #return customer                        
     def getProduct(self, product_id):
-        for c in self.products:
-            if c.product_id == product_id:
-                return c
-    def removeProduct(self, c):
-        self.products.remove(c)
+        for p in self.products:                   #search for product by id
+            if p.product_id == product_id:        #if id is found
+                return p                          #return product  
+    def removeProduct(self, p):                  
+        self.products.remove(p)                   #remove product from list
+    

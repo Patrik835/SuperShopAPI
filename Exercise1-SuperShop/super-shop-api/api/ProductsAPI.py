@@ -81,9 +81,25 @@ class ProductSales(Resource):
         p.sell(quantity)
         c.buyProduct(p.name, quantity)     
         return jsonify(f"Product {p.name} was sold to {c.name}. Products left: {p.qty},{c.name} bought these products: {c.boughtProducts} so far.")
+    
 @ProductAPI.route('/remove')
 class RemoveProduct(Resource):
-    @ProductAPI.doc(description="Remove a product", params={'product_id': 'Product ID'})
-    def remove(self):
+    @ProductAPI.doc(description="Remove a product from inventory", params={'product_id': 'Product ID', 'reason': 'Reason for removal'})
+    def delete(self):
         args = request.args
         product_id = args['product_id']
+        reason = args['reason']
+        p = my_shop.getProduct(product_id)
+        if not p:
+            return jsonify(f"Product ID {product_id} was not found")
+        p.removeFromInventory(reason)
+        return jsonify(f"Product {p.name} was removed from inventory. Reason: {p.reason}")
+@ProductAPI.route('/reorder')
+class ReorderProduct(Resource):
+    @ProductAPI.doc(description="Display list of products that need to be reordered")
+    def get(self):
+        reordered_products = []                        #create empty list
+        for product in my_shop.products:               #going through products
+            if product.setReorder() != None:           #if product needs to be reordered
+                reordered_products.append(product.setReorder())        #add product to list
+        return jsonify(reordered_products)        #return list of products that need to be reordered
