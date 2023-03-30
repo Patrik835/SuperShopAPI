@@ -79,6 +79,7 @@ class ProductSales(Resource):
         elif p.qty < int(quantity):
             return jsonify(f"Product {p.name} is out of stock")
         p.sell(quantity)
+        p.manipulateQty(quantity)
         c.buyProduct(p.name, quantity)     
         return jsonify(f"Product {p.name} was sold to {c.name}. Products left: {p.qty},{c.name} bought these products: {c.boughtProducts} so far.")
     
