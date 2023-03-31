@@ -61,4 +61,6 @@ class Customer:
             self.shoppingCart.pop(key)
 
     def addBonusPoints(self, points):
-        self.bonus_points += points
+        self.bonus_points += int(points)
+    def getBonusPoints(self):
+        return self.bonus_points

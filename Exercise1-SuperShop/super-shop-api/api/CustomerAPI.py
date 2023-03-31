@@ -136,7 +136,7 @@ class CustomerPWReset(Resource):
         quantity = args['quantity']
         p = my_shop.getProduct(product_id)
         try:                                    #check if the quantity is a integer
-            quantity = int(quantity)
+            int(quantity)
         except:
             return jsonify("Quantity must be a integer")        #if not return error message
         if not c:                                               #check if the customer id is in the list
@@ -185,7 +185,7 @@ class CustomerOrder(Resource):
             c.orders = [send, dellivery]
             return jsonify(f"Order was sent succesfully to {shipping_address}. You have now: {c.bonus_points} bonsu points") 
 @CustomerAPI.route('/<customer_id>/orders')
-class CustomerOrder(Resource):
+class CustomerOrders(Resource):
     @CustomerAPI.doc(description="Get data about orders.")
     def get(self, customer_id):
         c = my_shop.getCustomer(customer_id)
@@ -194,7 +194,7 @@ class CustomerOrder(Resource):
         else:
             return jsonify(c.orders)
 @CustomerAPI.route('/<customer_id>/returnable')
-class CustomerOrder(Resource):
+class Returnable(Resource):
     @CustomerAPI.doc(description="Get products that are still returnable.")
     def get(self, customer_id):
         c = my_shop.getCustomer(customer_id)
@@ -206,3 +206,40 @@ class CustomerOrder(Resource):
             if lis[1] + datetime.timedelta(days=14) > datetime.date.today():
                 c.returnable.append(product)
         return jsonify(c.returnable)
+@CustomerAPI.route('/<customer_id>/recommendations')
+class Reccommendations(Resource):
+    @CustomerAPI.doc(description="Get recommendations to customer.")
+    def get(self, customer_id):
+        top_list = []
+        c = my_shop.getCustomer(customer_id)
+        if not c:                                               #check if the customer id is in the list
+            return jsonify(f"Customer ID {customer_id} was not found")
+        sorted_products_by_qty = sorted(c.boughtProducts.items(), key = lambda x:x[1], reverse = True)  #sorting the history dict from biggest to lowest
+        sorted_products_by_qty_dict = dict(sorted_products_by_qty)         #converting it back to dictionary
+        for product in sorted_products_by_qty_dict:                    #taking first 10 id and appending them to final list
+            if len(top_list) <= 10:
+                top_list.append(product)
+        return jsonify(top_list)
+
+@CustomerAPI.route('/<customer_id>/points')
+class Points(Resource):
+    @CustomerAPI.doc(description="Get customers bonus points.")
+    def get(self, customer_id):
+        c = my_shop.getCustomer(customer_id)
+        if not c:
+            return jsonify(f"Customer with id {customer_id} was not found")
+        points = c.getBonusPoints()
+        return jsonify(f"You have now {points} points.")
+    @CustomerAPI.doc(description="Add customers bonus points.", params = {"number_of_pts":"Number of Points"})
+    def put(self, customer_id):
+        c = my_shop.getCustomer(customer_id)
+        args = request.args
+        nr_points = args["number_of_pts"]
+        if not c:
+            return jsonify(f"Customer with id {customer_id} was not found")
+        try:                                    #check if the quantity is a integer
+            int(nr_points)
+        except:
+            return jsonify("Quantity must be a integer")        #if not return error message
+        c.addBonusPoints(nr_points)
+        return jsonify(f"You have succesfully added {nr_points} points.")

@@ -50,7 +50,7 @@ class SpecificProductOps(Resource):
         args = request.args
         amount = args['quantity']
         try:
-            amount = int(amount)
+            int(amount)
         except:
             return jsonify("Quantity must be a integer")    
         if not p:
@@ -69,7 +69,7 @@ class ProductSales(Resource):
         c = my_shop.getCustomer(customer_id)
         p = my_shop.getProduct(product_id)
         try:
-            quantity = int(quantity)
+            int(quantity)
         except:
             return jsonify("Quantity must be a integer") 
         if not p:
