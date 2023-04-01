@@ -14,7 +14,6 @@ CustomerAPI = Namespace('customer',
 
 @CustomerAPI.route('/')
 class GeneralCustomerOps(Resource):
-
     @CustomerAPI.doc(description="Get a list of all customers")
     def get(self):
         return jsonify(my_shop.customers)

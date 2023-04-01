@@ -14,7 +14,7 @@ class AddProductA(Resource):
     @ProductAPI.doc(description="Get a list of all products")
     def get(self):
         return jsonify(my_shop.products)
-    @ProductAPI.doc(params={'name': 'Product name',
+    @ProductAPI.doc(description="Add Product",params={'name': 'Product name',
                             'expiry': 'expiry date',
                             'category': 'product category'})
     def post(self):

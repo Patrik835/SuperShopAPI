@@ -2,6 +2,7 @@ class Shop:
     def __init__(self):
         self.customers = []
         self.products = []
+        self.coupons = []
 
     def addProduct(self, p):
         self.products.append(p)
@@ -31,4 +32,6 @@ class Shop:
                 return p                          #return product  
     def removeProduct(self, p):                  
         self.products.remove(p)                   #remove product from list
+    def addCoupon(self, c):                     #adding coupons
+        self.coupons.append(c)
     
