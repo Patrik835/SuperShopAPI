@@ -146,7 +146,6 @@ class CustomerPWReset(Resource):
             return jsonify(f"Product {p.name} is out of stock please add to cart less or equal than {p.qty}") 
         else:
             c.addToCart(product_id,int(quantity))                        #add product to cart
-            p.manipulateQty(int(quantity))                                #change the quantity of the product left in the shop
             return jsonify(f"Product with ID {product_id} was added to cart with quantity: {quantity}")
 @CustomerAPI.route('/<customer_id>/order')
 class CustomerOrder(Resource):
@@ -168,11 +167,10 @@ class CustomerOrder(Resource):
             for prod in c.shoppingCart:                    #loop through the shopping cart
                 qty = c.shoppingCart[prod]                 #store the quantity of the product in the cart              
                 total_price +=  qty * my_shop.getProduct(prod).price     #calculate the total price
-                c.sentOrder(prod, c.shoppingCart[prod])                                #send the order to the shop
+                c.sentOrder(prod, qty)                                #send the order to the shop
                 p = my_shop.getProduct(prod)
                 p.sell(qty)                            #sell the product
             c.updateShoppingCart()                                     #update the shopping cart
-            
             if total_price > int(c.bonus_points*0.1):                  #check if the total price is bigger than value of bonus points
                 end_price = total_price - int(c.bonus_points*0.1)      #if yes calculate the end price by subtracting the value of bonus points
             else:                                                #if the price is smaller than the value of bonus points
@@ -182,7 +180,7 @@ class CustomerOrder(Resource):
             send = datetime.date.today()
             dellivery = send + datetime.timedelta(days=3)
             c.orders = [send, dellivery]
-            return jsonify(f"Order was sent succesfully to {shipping_address}. You have now: {c.bonus_points} bonsu points") 
+            return jsonify(f"Order was sent succesfully to {shipping_address}. You have now: {c.bonus_points} bonus points") 
 @CustomerAPI.route('/<customer_id>/orders')
 class CustomerOrders(Resource):
     @CustomerAPI.doc(description="Get data about orders.")
@@ -197,7 +195,6 @@ class Returnable(Resource):
     @CustomerAPI.doc(description="Get products that are still returnable.")
     def get(self, customer_id):
         c = my_shop.getCustomer(customer_id)
-        
         if not c:                                               #check if the customer id is in the list
             return jsonify(f"Customer ID {customer_id} was not found")
         for product in c.boughtProducts:

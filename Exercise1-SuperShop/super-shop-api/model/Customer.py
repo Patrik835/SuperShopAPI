@@ -41,8 +41,6 @@ class Customer:
                 self.shoppingCart.pop(product)
         elif qty > 0:
             self.shoppingCart[product] = qty          #else the product is not in the shopping cart, add the product and the quantity
-        else:
-            pass 
     def verifyCreditCard(self, ccnr):
         if ccnr == self.credit_card_nr and len(str(self.credit_card_nr == 16)):
             return True
