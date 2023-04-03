@@ -1,4 +1,3 @@
-# test_with_pytest.py
 from _pytest.fixtures import fixture
 from model.Customer import Customer
 from _pytest.fixtures import fixture
