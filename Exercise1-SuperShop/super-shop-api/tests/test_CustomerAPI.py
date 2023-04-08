@@ -32,7 +32,7 @@ def test_shop_init():
 def test_customer_add(exampleCustomer1):
     shop = Shop()
     shop.addCustomer(exampleCustomer1)
-    assert exampleCustomer1 in shop.customers
+    assert exampleCustomer1  in shop.customers
     # try adding again
     shop.addCustomer(exampleCustomer1)
     assert len(shop.customers) == 1 # should be added only once
