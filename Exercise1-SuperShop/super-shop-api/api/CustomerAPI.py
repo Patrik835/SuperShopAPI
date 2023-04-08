@@ -50,9 +50,9 @@ class SpecificCustomerOps(Resource):
     def delete(self, customer_id):                                             
         c = my_shop.getCustomer(customer_id)                                        #store customer id in c
         if not c:                                                     #check if the customer id is in the list
-            return jsonify("Customer ID {cust_id} was not found")     #if not return error message
+            return jsonify("Customer ID {customer_id} was not found")     #if not return error message
         my_shop.removeCustomer(c)                                     #remove the customer
-        return jsonify("Customer with ID {cust_id} was removed")      #return message with the removed customer id
+        return jsonify("Customer was removed")      #return message with the removed customer id
 
     @CustomerAPI.doc(
         description="Update customer data",                 

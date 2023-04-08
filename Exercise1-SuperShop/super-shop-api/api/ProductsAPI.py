@@ -79,7 +79,7 @@ class ProductSales(Resource):
             return jsonify(f"Product {p.name} is out of stock")
         p.sell(quantity)                  # sell the product
         c.buyProduct(p.name, quantity)      # add the product to the customer's bought products history
-        return jsonify(f"Product {p.name} was sold to {c.name}. Products left: {p.qty},{c.name} bought these products: {c.boughtProducts} so far.") 
+        return jsonify(f"Product {p.name} was sold to {c.name}. Products left: {p.qty}.") 
     
 @ProductAPI.route('/remove')
 class RemoveProduct(Resource):
@@ -101,4 +101,6 @@ class ReorderProduct(Resource):
         for product in my_shop.products:               #going through products
             if product.setReorder() != None:           #if product needs to be reordered  pozri ci tam nie je None
                 reordered_products.append(product.setReorder())        #add product to list
+            else:
+                pass
         return jsonify(reordered_products)        #return list of products that need to be reordered
